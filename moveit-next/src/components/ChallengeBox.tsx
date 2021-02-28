@@ -1,13 +1,26 @@
 import { useContext } from 'react';
 import { ChallengesContext } from '../contexts/ChallengesContext';
+import { CountdownContext } from '../contexts/CountdownContext';
 import styles from '../styles/components/ChallengeBox.module.css';
 
 export function ChallengeBox() {
     
     //recebe o valor de contesto do component ChallengesContext.
     //useContext é utilizado para fazer a ponte entre varios components.
-    const {activeChallenge, resetChallenge } = useContext(ChallengesContext)
-    
+    const {activeChallenge, resetChallenge, completChallenge } = useContext(ChallengesContext)
+    const  {resetCountdown} = useContext(CountdownContext);
+
+    function handleChanllengeSucceded() {
+        completChallenge();
+        resetCountdown();
+    }
+
+    function handleChanllengeFailed() {
+        resetChallenge();
+        resetCountdown();
+    }
+
+
     return(
         <div className={styles.challengeBoxContainer}>
             {activeChallenge ? (
@@ -24,7 +37,7 @@ export function ChallengeBox() {
                         <button 
                             type="button"
                             className={styles.challengeFailButton}
-                            onClick={resetChallenge}
+                            onClick={handleChanllengeFailed}
                         >
                             Falhei
                         </button>
@@ -32,6 +45,7 @@ export function ChallengeBox() {
                         <button
                             type="button"
                             className={styles.challengeSucceededButton}
+                            onClick={handleChanllengeSucceded}
                             >
                             Completei
                         </button>
